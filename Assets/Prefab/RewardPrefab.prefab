@@ -162,7 +162,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8509821076003321087}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8509821076003321058}
+        m_TargetAssemblyTypeName: RewardTask.Rewards.RewardView, Assembly-CSharp
+        m_MethodName: OnClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &8509821076003321058
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -175,6 +187,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7db186191c5e08445b7333a0f7f44429, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rewardTransform: {fileID: 8509821076657790179}
+  currencyTransform: {fileID: 8509821076184729613}
+  rewardImage: {fileID: 8509821076657790176}
+  currencyImage: {fileID: 8509821076184729714}
+  backgroundImage: {fileID: 8509821076003321087}
+  progressImage: {fileID: 8509821076339465153}
+  statusObjectList:
+  - {fileID: 8509821076755596521}
+  - {fileID: 8509821075986577641}
+  - {fileID: 8509821077845910690}
+  backgroundSpriteList:
+  - {fileID: 21300000, guid: b4217c88712e89a4c847faeb5098f798, type: 3}
+  - {fileID: 21300000, guid: 88fea695c2006f245bc8489524f544f0, type: 3}
+  - {fileID: 21300000, guid: 17972b764f8aea442849406f21a97489, type: 3}
+  - {fileID: 21300000, guid: db37fc5e6e47b8149849a34367b1d886, type: 3}
+  GoTimer: {fileID: 8509821076169199284}
+  CoolDownTimer: {fileID: 8509821076419319033}
+  CurrencyValue: {fileID: 8509821076193329677}
+  <RewardButton>k__BackingField: {fileID: 8509821076003321085}
+  <Animator>k__BackingField: {fileID: 1239243860}
 --- !u!1 &8509821076040753102
 GameObject:
   m_ObjectHideFlags: 0
@@ -670,7 +702,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
-  m_FillAmount: 1
+  m_FillAmount: 0
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
@@ -821,6 +853,7 @@ GameObject:
   - component: {fileID: 8509821076657790179}
   - component: {fileID: 8509821076657790177}
   - component: {fileID: 8509821076657790176}
+  - component: {fileID: 1239243860}
   m_Layer: 5
   m_Name: RewardImage
   m_TagString: Untagged
@@ -876,7 +909,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 3e17e6f76c3d0524caf739a17a4ff252, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -886,6 +919,26 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!95 &1239243860
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8509821076657790178}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: f5abf5c218d2a9b41bce9182ebaf02d3, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &8509821076755596521
 GameObject:
   m_ObjectHideFlags: 0
@@ -901,7 +954,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &8509821076755596526
 RectTransform:
   m_ObjectHideFlags: 0

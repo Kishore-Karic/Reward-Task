@@ -1,24 +1,32 @@
 using Newtonsoft.Json;
 using RewardTask.Rewards;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
-namespace RewardTask.APIService
+namespace RewardTask.Service
 {
     public class APIService : MonoBehaviour
     {
         Coroutine coroutine, coroutine2;
+        public Sprite sprite1;
         public Image image, image1;
-        public GameObject ImageObject, ImageObject1;
+        public GameObject ImageObject, ImageObject1, dummy;
         public RectTransform rectTransform, rectTransform1;
         private RewardsList rewardsList;
         [SerializeField] private RewardService rewardService;
 
+        [field: SerializeField] public List<Image> RewardSpritesList { get; private set; }
+        [field: SerializeField] public List<Image> CurrencySpritesList { get; private set; }
+
+        public List<RewardModelProperties> RewardModelPropertiesList { get; private set; }
+        private bool gotImageSprite, gotCurrencyImageSprite;
 
         void Start()
         {
+            Debug.Log(image.sprite);
             GetURL();
         }
 
@@ -46,90 +54,127 @@ namespace RewardTask.APIService
             {
                 string json = webRequest.downloadHandler.text;
                 rewardsList = JsonConvert.DeserializeObject<RewardsList>(json);
-                /*Debug.Log(json);
+                Debug.Log(json);
                 Debug.Log(rewardsList.status);
-                foreach(RewardProperties rew in rewardsList.rewards)
-                {
-                    Debug.Log(rew.id);
-                    Debug.Log(rew.image);
-                    Debug.Log(rew.status);
-                    Debug.Log(rew.award_every_minutes);
-                    Debug.Log(rew.minimum_connection_minutes);
-                    Debug.Log(rew.loggedin_seconds);
-                    Debug.Log(rew.curr_earned);
-                    Debug.Log(rew.currency_required);
-                    Debug.Log(rew.currency_image);
-                    Debug.Log(rew.cool_down_minutes_passed);
-                }*/
-                GetTex();
+
+                IniatizeRewardModel();
                 //rewardService.SpawnRewards(rewardsList);
             }
 
 
         }
 
-        private void GetTex()
+        private void IniatizeRewardModel()
+        {
+            RewardModelPropertiesList = new List<RewardModelProperties>();
+            for(int i = 0; i < rewardsList.rewards.Length; i++)
+            {
+                RewardModelPropertiesList.Add(new RewardModelProperties(rewardsList.rewards[i]));
+            }
+
+            StartCoroutine(GetImages());
+        }
+
+        IEnumerator GetImages()
+        {
+            for(int i = 0; i < rewardsList.rewards.Length; i++)
+            {
+                coroutine = StartCoroutine(WaitTex(rewardsList.rewards[i].image, RewardSpritesList[i]));
+                yield return new WaitUntil(() => coroutine == null);
+                coroutine = StartCoroutine(WaitTex(rewardsList.rewards[i].currency_image, CurrencySpritesList[i]));
+                yield return new WaitUntil(() => coroutine == null);
+                //GetTex(rewardsList.rewards[i].image, rewardsList.rewards[i].image_sprite);
+                //GetTex1(i);
+                //yield return (gotImageSprite == true);
+
+                //gotImageSprite = false;
+
+                //GetTex(rewardsList.rewards[i].currency_image, rewardsList.rewards[i].currency_image_sprite);
+                //yield return (gotImageSprite == true);
+
+                Debug.Log(i);
+                //gotImageSprite = false;
+            }
+
+            foreach (RewardModelProperties rew in RewardModelPropertiesList)
+            {
+                Debug.Log(rew.Id);
+                Debug.Log(rew.ImageURL);
+                Debug.Log(rew.Status);
+                Debug.Log(rew.AwardEveryMinutes);
+                Debug.Log(rew.MinimumConnectionMinutes);
+                Debug.Log(rew.LoggedinSeconds);
+                Debug.Log(rew.CurrencyEarned);
+                Debug.Log(rew.CurrencyRequired);
+                Debug.Log(rew.CurrencyImageURL);
+                Debug.Log(rew.CoolDownMinutesPassed);
+            }
+            rewardService.SpawnRewards();
+        }
+
+        private void GetTex(string _text, Image _image)
+        {
+            if (coroutine != null)
+            {
+                StopCoroutine(coroutine);
+            }
+            coroutine = StartCoroutine(WaitTex(_text, _image));
+        }
+
+        private void GetTex1(int j)
         {
             if (coroutine2 != null)
             {
                 StopCoroutine(coroutine2);
             }
-            coroutine2 = StartCoroutine(WaitTex(rewardsList.rewards[3].image));
+            coroutine2 = StartCoroutine(WaitTex1(j));
         }
 
-        private void GetTex1()
+        IEnumerator WaitTex(string _text, Image _image)
         {
-            if (coroutine2 != null)
-            {
-                StopCoroutine(coroutine2);
-            }
-            coroutine2 = StartCoroutine(WaitTex1(rewardsList.rewards[4].currency_image));
-        }
-
-        IEnumerator WaitTex(string text)
-        {
-            UnityWebRequest imageRequest = UnityWebRequestTexture.GetTexture(text);
+            UnityWebRequest imageRequest = UnityWebRequestTexture.GetTexture(_text);
 
             yield return imageRequest.SendWebRequest();
 
-
             if (imageRequest.isNetworkError || imageRequest.isHttpError)
             {
-                GetTex();
+                WaitTex(_text, _image);
             }
             else
             {
                 var tex = ((DownloadHandlerTexture)imageRequest.downloadHandler).texture;
                 Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(tex.width / 2, tex.height / 2));
-                rectTransform.sizeDelta = new Vector2(sprite.texture.width / 2.5f, sprite.texture.height / 2.5f);
-                image.sprite = sprite;
+                //rectTransform.sizeDelta = new Vector2(sprite.texture.width / 2.5f, sprite.texture.height / 2.5f);
+                //Debug.Log(sprite);
+                
+                _image.sprite = sprite;
+                //image1.sprite = _sprite;
+                //Debug.Log(image1.sprite);
 
-                GetTex1();
+                coroutine = null;
+                gotImageSprite = true;
             }
-
-
         }
 
-        IEnumerator WaitTex1(string text)
+        IEnumerator WaitTex1(int j)
         {
-            UnityWebRequest imageRequest1 = UnityWebRequestTexture.GetTexture(text);
+            UnityWebRequest imageRequest1 = UnityWebRequestTexture.GetTexture(rewardsList.rewards[j].currency_image);
 
             yield return imageRequest1.SendWebRequest();
 
-
             if (imageRequest1.isNetworkError || imageRequest1.isHttpError)
             {
-                GetTex1();
+                GetTex1(j);
             }
             else
             {
                 var tex = ((DownloadHandlerTexture)imageRequest1.downloadHandler).texture;
                 Sprite sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(tex.width / 2, tex.height / 2));
-                rectTransform1.sizeDelta = new Vector2(sprite.texture.width / 2.5f, sprite.texture.height / 2.5f);
-                image1.sprite = sprite;
+                //rectTransform1.sizeDelta = new Vector2(sprite.texture.width / 2.5f, sprite.texture.height / 2.5f);
+                //rewardsList.rewards[j].currency_image_sprite = sprite;
+
+                gotCurrencyImageSprite = true;
             }
-
-
         }
     }
 }

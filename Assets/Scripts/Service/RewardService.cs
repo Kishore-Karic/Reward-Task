@@ -1,18 +1,19 @@
+using System.Collections.Generic;
 using UnityEngine;
+using RewardTask.Service;
 
 namespace RewardTask.Rewards
 {
     public class RewardService : MonoBehaviour
     {
-        private RewardsList rewardsList;
+        [SerializeField] private List<RewardView> rewardPrefabsList;
+        [SerializeField] private APIService apiService;
 
-        public void SpawnRewards(RewardsList _rewardsList)
+        public void SpawnRewards()
         {
-            rewardsList = _rewardsList;
-
-            for(int i = 0; i < rewardsList.rewards.Length; i++)
+            for(int i = 0; i < apiService.RewardModelPropertiesList.Count; i++)
             {
-
+                new RewardController(new RewardModel(apiService.RewardModelPropertiesList[i]), rewardPrefabsList[i], apiService.RewardSpritesList[i], apiService.CurrencySpritesList[i]);
             }
         }
     }

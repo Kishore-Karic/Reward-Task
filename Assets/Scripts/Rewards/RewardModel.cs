@@ -1,5 +1,4 @@
 using RewardTask.Enum;
-using System;
 
 namespace RewardTask.Rewards
 {
@@ -16,44 +15,18 @@ namespace RewardTask.Rewards
         public string CurrencyImageURL { get; private set; }
         public int CoolDownMinutesPassed { get; private set; }
 
-        public RewardModel(RewardProperties rewardProperties)
+        public RewardModel(RewardModelProperties rewardModelProperties)
         {
-            int id, awardEveryMinute, minimumConnectionMinutes, loggedinSeconds, currencyEarned, currencyRequired, coolDownMinutesPassed;
-            Int32.TryParse(rewardProperties.id, out id);
-            Int32.TryParse(rewardProperties.award_every_minutes, out awardEveryMinute);
-            Int32.TryParse(rewardProperties.minimum_connection_minutes, out minimumConnectionMinutes);
-            Int32.TryParse(rewardProperties.loggedin_seconds, out loggedinSeconds);
-            Int32.TryParse(rewardProperties.curr_earned, out currencyEarned);
-            Int32.TryParse(rewardProperties.currency_required, out currencyRequired);
-            Int32.TryParse(rewardProperties.cool_down_minutes_passed, out coolDownMinutesPassed);
-
-            Id = id;
-            ImageURL = rewardProperties.image;
-
-            switch (rewardProperties.status)
-            {
-                case "go":
-                    Status = RewardStatus.Go;
-                    break;
-
-                case "claim":
-                    Status = RewardStatus.Claim;
-                    break;
-
-                case "cooling":
-                    Status = RewardStatus.Cooling;
-                    break;
-
-                default:
-                    break;
-            }
-
-            AwardEveryMinutes = awardEveryMinute;
-            MinimumConnectionMinutes = minimumConnectionMinutes;
-            LoggedinSeconds = loggedinSeconds;
-            CurrencyEarned = currencyEarned;
-            CurrencyRequired = currencyRequired;
-            CoolDownMinutesPassed = coolDownMinutesPassed;
+            Id = rewardModelProperties.Id;
+            ImageURL = rewardModelProperties.ImageURL;
+            Status = rewardModelProperties.Status;
+            AwardEveryMinutes = rewardModelProperties.AwardEveryMinutes;
+            MinimumConnectionMinutes = rewardModelProperties.MinimumConnectionMinutes;
+            LoggedinSeconds = rewardModelProperties.LoggedinSeconds;
+            CurrencyEarned = rewardModelProperties.CurrencyEarned;
+            CurrencyRequired = rewardModelProperties.CurrencyRequired;
+            CurrencyImageURL = rewardModelProperties.CurrencyImageURL;
+            CoolDownMinutesPassed = rewardModelProperties.CoolDownMinutesPassed;
         }
     }
 }
