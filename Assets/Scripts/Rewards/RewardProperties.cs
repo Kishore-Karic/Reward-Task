@@ -1,5 +1,3 @@
-using UnityEngine;
-
 namespace RewardTask.Rewards
 {
     [System.Serializable]

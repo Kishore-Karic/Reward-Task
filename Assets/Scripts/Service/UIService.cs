@@ -1,23 +1,35 @@
-using RewardTask.GenericSingleton;
 using RewardTask.Rewards;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace RewardTask.Service
 {
-    public class UIService : GenericSingleton<UIService>
+    public class UIService : MonoBehaviour
     {
-        [SerializeField] private Button openRewardsButton, subtractButton, cancelButton, collectButton;
+        [SerializeField] private Button openRewardsButton, subtractButton, cancelButton, collectButton, quitButton;
+        [SerializeField] private GameObject rewardsPanel, collectRewardPanel, loadingPanel;
+        [SerializeField] private RewardService rewardService;
+
         private RewardView rewardView;
-        [SerializeField] private GameObject collectRewardPanel;
 
-        protected override void Awake()
+        protected void Awake()
         {
-            base.Awake();
-
+            openRewardsButton.onClick.AddListener(OpenRewardsPanel);
             subtractButton.onClick.AddListener(SubtractCurrencies);
             cancelButton.onClick.AddListener(CloseRewardsPanel);
             collectButton.onClick.AddListener(CollectReward);
+            quitButton.onClick.AddListener(Application.Quit);
+        }
+
+        public void OpenRewardsPanel()
+        {
+            EventService.Instance.OnShowRewards();
+            rewardsPanel.SetActive(true);
+        }
+
+        public void GotData()
+        {
+            loadingPanel.SetActive(false);
         }
 
         public void SubtractCurrencies()
@@ -27,7 +39,8 @@ namespace RewardTask.Service
 
         public void CloseRewardsPanel()
         {
-
+            EventService.Instance.OnRewardsClosed();
+            rewardsPanel.SetActive(false);
         }
 
         public void ShowCollectReward(RewardView _rewardView)

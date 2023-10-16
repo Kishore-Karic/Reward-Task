@@ -16,6 +16,8 @@ namespace RewardTask.Rewards
         public string CurrencyImageURL;
         public int CoolDownMinutesPassed;
 
+        private const string Go = "go", Claim = "claim", Cooling = "cooling";
+
         public RewardModelProperties(RewardProperties rewardProperties)
         {
             int id, awardEveryMinute, minimumConnectionMinutes, loggedinSeconds, currencyEarned, currencyRequired, coolDownMinutesPassed;
@@ -32,15 +34,15 @@ namespace RewardTask.Rewards
 
             switch (rewardProperties.status)
             {
-                case "go":
+                case Go:
                     Status = RewardStatus.Go;
                     break;
 
-                case "claim":
+                case Claim:
                     Status = RewardStatus.Claim;
                     break;
 
-                case "cooling":
+                case Cooling:
                     Status = RewardStatus.Cooling;
                     break;
 
